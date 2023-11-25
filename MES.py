@@ -9,5 +9,5 @@ class MES:
         self.CE.train(train, test)
         self.ME.train(train, test)
 
-    def predict(self):
+    def predict(self, fblob, bblob):
         pass

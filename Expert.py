@@ -3,7 +3,7 @@ from abc import abstractmethod
 
 class Expert(ABC):
     def __init__(self):
-        pass
+        self.weight = 0
 
     def train(self, train, test):
         pass
@@ -12,5 +12,5 @@ class Expert(ABC):
         pass
 
     @abstractmethod
-    def predict(self, fblobs, bblobs):
+    def predict(self, fblob, bblob):
         pass

@@ -2,7 +2,7 @@ from Expert import Expert
 
 class Color_Expert(Expert):
     def __init__(self):
-        pass
+        super().__init__()
 
-    def predict(self, fblobs, bblobs):
+    def predict(self, fblob, bblob):
         pass

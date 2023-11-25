@@ -4,26 +4,21 @@ from Shape_Expert import Shape_Expert
 from Movement_Expert import Movement_Expert
 from MES import MES
 
-def foreground_mask_extraction(fIm, bmask):
-    pass
-    return bmask, mask
-
-def background_update(bmask):
-    return bmask
-
-def connected_comp_label(mask):
+def get_blob(img, bsub):
+    blobs = bsub.apply(img)
+    blobs = cv2.connectedComponents(blobs)
     return blobs
 
-def color_expert(fblobs, bblobs):
-    pass
-
-def shape_expert(fblobs, bblobs):
-    pass
-
-def movement_expert(fblobs, bblobs):
-    pass
+def get_blobs(imgs):
+    blobs = []
+    for img in imgs:
+        blobs.append(get_blob(img))
+    return blobs
 
 def main():
+    # Background
+    backSub = cv2.createBackgroundSubtractorKNN()
+
     # Create Experts / MES
     ce = Color_Expert()
     me = Movement_Expert()
