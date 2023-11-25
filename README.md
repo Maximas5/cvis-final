@@ -1,6 +1,6 @@
 # CS 5680 Computer Vision Final Project
 
-Repo found (here)[https://github.com/Maximas5/cvis-final]
+Repo found [here](https://github.com/Maximas5/cvis-final)
 
 ### 11/25 Phase I Update:
 
