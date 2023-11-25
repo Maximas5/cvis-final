@@ -10,6 +10,8 @@ Repo found [here](https://github.com/Maximas5/cvis-final)
 
 - Completed pre-classification algorithm to separate objects for individual classification
 
+- Having some issues getting the dataset from https://mivia.unisa.it/datasets-request/
+
 ### 12/2 Phase II Update:
 
 ### 12/11 Phase III (Final Due Date) Update:
