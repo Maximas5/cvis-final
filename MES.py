@@ -6,8 +6,9 @@ class MES:
         self.ME = movementEx
 
     def train(self, train, test):
-        self.CE.train(train, test)
-        self.ME.train(train, test)
+        self.CEvalMatrix = self.CE.train(train, test)
+        self.MEvalMatrix = self.ME.train(train, test)
 
     def predict(self, fblob, bblob):
         pass
+    
