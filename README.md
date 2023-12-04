@@ -18,6 +18,6 @@ Repo found [here](https://github.com/Maximas5/cvis-final)
 
 - Further investigation of data (No meaningful progress, but promising directions)
 
-- I Better Understand the missing areas of the paper I need to extrapolate/research, specifically the bag-of-words and corner location algorithms
+- I Better Understand the missing areas of the paper I need to extrapolate/research, specifically the bag-of-words and corner location algorithms (SIFT)
 
 ### 12/11 Phase III (Final Due Date) Update:
