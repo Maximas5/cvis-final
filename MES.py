@@ -5,10 +5,10 @@ class MES:
         self.CE = colorEx
         self.ME = movementEx
 
-    def train(self, train, test):
-        self.CEvalMatrix = self.CE.train(train, test)
-        self.MEvalMatrix = self.ME.train(train, test)
+    def train(self, data):
+        self.CEvalMatrix = self.CE.train(data)
+        self.MEvalMatrix = self.ME.train(data)
 
-    def predict(self, fblob, bblob):
+    # Takes the blobs in and returns a class prediction (0 or 1)
+    def predict(self, blobT, blobT1):
         pass
-    

@@ -1,34 +1,47 @@
 import cv2
-from Color_Expert import Color_Expert
-from Shape_Expert import Shape_Expert
-from Movement_Expert import Movement_Expert
-from MES import MES
+import numpy as np
+from Fire_Id import Fire_Id
 
-def get_blob(img, bsub):
-    blobs = bsub.apply(img)
-    blobs = cv2.connectedComponents(blobs)
-    return blobs
+def extract_frames(video_path):
+    # Open the video file
+    video_capture = cv2.VideoCapture(video_path)
 
-def get_blobs(imgs):
-    blobs = []
-    for img in imgs:
-        blobs.append(get_blob(img))
-    return blobs
+    frames = []
+    while video_capture.isOpened():
+        # Read a frame from the video file
+        ret, frame = video_capture.read()
+
+        # If there are no more frames to read, break the loop
+        if not ret:
+            break
+
+        # Convert the frame to a NumPy array and append to the frames list
+        frames.append(np.array(frame))
+
+    # Release the video capture object
+    video_capture.release()
+
+    return frames
 
 def main():
-    # Background
-    backSub = cv2.createBackgroundSubtractorKNN()
+    # Import Data
+    data = extract_frames('test_fire/indoor1.mp4')
+    train = data
+    test = data
 
-    # Create Experts / MES
-    ce = Color_Expert()
-    me = Movement_Expert()
+    # Separate into train and test data (different cameras should not be used in the same train and/or test)
 
-    mes = MES(ce, me)
 
-    # Train Experts / MES
-    mes.train()
+    # Make Fire_Id object
+    classifier = Fire_Id()
 
-    # Loop / 1 iteration
+    # Train
+    classifier.train(train)
+
+    # Test
+    results = classifier.test(data)
+
+    # Print results
 
 
 if __name__ == "__main__":

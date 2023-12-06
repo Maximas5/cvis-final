@@ -13,4 +13,5 @@ class Expert(ABC):
 
     @abstractmethod
     def predict(self, fblob, bblob):
+        # Return blob and class
         pass
