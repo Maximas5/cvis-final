@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 from Fire_Id import Fire_Id
+from sklearn.model_selection import train_test_split
 
 def extract_frames(video_path):
     # Open the video file
@@ -25,12 +26,13 @@ def extract_frames(video_path):
 
 def main():
     # Import Data
-    data = extract_frames('test_fire/indoor1.mp4')
-    train = data
-    test = data
+    video = extract_frames('test_fire/indoor1.mp4')
+    labels = None
+
+    data = np.vstack(video, labels)
 
     # Separate into train and test data (different cameras should not be used in the same train and/or test)
-
+    train, test = train_test_split(data, test_size=.2, random_state=12345)
 
     # Make Fire_Id object
     classifier = Fire_Id()
@@ -39,10 +41,10 @@ def main():
     classifier.train(train)
 
     # Test
-    results = classifier.test(data)
+    results = classifier.test(test)
 
     # Print results
-
+    
 
 if __name__ == "__main__":
     main()
