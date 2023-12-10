@@ -31,4 +31,8 @@ class Fire_Id:
     
     def train(self, data):
         self.backSub = cv2.createBackgroundSubtractorKNN()
-        blobs = self.get_Blobs(data)
+
+        # data [img, label]
+
+        # For each model...
+            # Run train

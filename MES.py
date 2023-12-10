@@ -5,10 +5,16 @@ class MES:
         self.CE = colorEx
         self.ME = movementEx
 
+        self.CEF = None
+        self.CEFNot = None
+
+        self.MEF = None
+        self.MEFNot = None
+
     def train(self, data):
-        self.CEvalMatrix = self.CE.train(data)
-        self.MEvalMatrix = self.ME.train(data)
+        self.CEF, self.CEFNot = self.CE.train(data)
+        self.MEF, self.MEFNot = self.ME.train(data)
 
     # Takes the blobs in and returns a class prediction (0 or 1)
-    def predict(self, blobT, blobT1):
+    def predict(self, img, prev_img, blob, prev_blob):
         pass

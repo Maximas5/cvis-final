@@ -5,4 +5,7 @@ class Movement_Expert(Expert):
         super().__init__()
 
     def predict(self, fblob, bblob):
+        # Detect corners
+
+        # Measure Gradients
         pass
