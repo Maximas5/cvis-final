@@ -19,7 +19,7 @@ class Fire_Id:
         blobs = cv2.connectedComponents(blobs)
         return blobs
     
-    def predict(self, img, prevImg, label=False):
+    def predict(self, img, prevImg, label=False, verbose=False):
         '''Given an image and the previous image, return True for fire and False for no fire
         
             If label=True, return the image labeled with blobs labeled as fire
@@ -29,15 +29,19 @@ class Fire_Id:
             -> classification
             
         '''
+        if verbose:
+            self.print("Getting blobs...")
         num, blobs = self.get_blobs(img)
 
         if num < 2:
+            if verbose:
+                self.print("No Objects found")
             if label:
-                return img, False
+                return img, False, False, False
             else:
-                return False
+                return False, False, False
 
-        prevBlobs = self.get_blobs(prevImg)
+        prevNum, prevBlobs = self.get_blobs(prevImg)
 
         # Get color image params
         yuv = cv2.cvtColor(img, cv2.COLOR_BGR2YUV)
@@ -45,34 +49,49 @@ class Fire_Id:
         uMean = np.mean(yuv[:, :, 1])
         vMean = np.mean(yuv[:, :, 2])
 
-        # Get shape image params
-
+        totalCce = False
+        totalCse = False
+        totalCmes = False
 
         # For each blob...
         for blobNum in range(1, num):
-            blobMask = blobs[blobs == blobNum]
-            blobMask[blobMask > 0] = 1
+            blobMask = self.get_mask(blobs, blobNum)
+
             # Predict color
-            yuvBlob = cv2.bitwise_and(yuv, yuv, mask=blobMask)
+            yuvBlob = self.apply_mask(yuv, blobMask)
+
             yuvFormatted = []
-
             for i in range(3):
-                yuvFormatted = yuvBlob[:, :, i].flatten()
+                yuvFormatted.append(yuvBlob[:, :, i].flatten())
 
-            Cce = self.ce.predict(yuvFormatted, yMean, uMean, vMean)
+            if verbose:
+                self.print("Predicting color...")
+            Cce = self.ce.predict(yuvFormatted, yMean, uMean, vMean, verbose=verbose)
+            if verbose:
+                self.print(f'Class found by color: {Cce}')
 
             # Predict shape
-            blob = cv2.bitwise_and(img, img, mask=blobMask)
+            if verbose:
+                self.print("Predicting shape...")
+            blob = self.apply_mask(img, blobMask)
             blobMatch = self.match(blobMask, prevBlobs)
             if blobMatch != None:
-                prevMask = prevBlobs[prevBlobs == blobMatch]
-                prevMask[blobMask > 0] = 1
-                blobMatch = cv2.bitwise_and(prevImg, prevImg, mask=prevMask)
+                prevMask = self.get_mask(prevBlobs, blobMatch)
+                blobMatch = self.apply_mask(prevImg, prevMask)
 
-            Cse = self.se.predict(blob, blobMatch)
+            Cse = self.se.predict(blob, blobMatch, verbose=verbose)
+            if verbose:
+                self.print(f'Class found by shape: {Cse}')
 
             # Predict MES
             Cmes = self.mes.predict(Cce, Cse)
+
+            if Cce:
+                totalCce = True
+            if Cse:
+                totalCse = True
+            if Cmes:
+                totalCmes = True
 
             # If label, label blob with classification of experts
             if label:
@@ -82,25 +101,26 @@ class Fire_Id:
         # if label, return labeled image and classification
         if label:   
             # TODO: probably won't be done by due date
-            return img, Cmes
-        return Cmes
+            return img, totalCce, totalCse, totalCmes
+        return totalCce, totalCse, totalCmes
     
     # TODO: Likely won't be done by due date. Have to at least train the backsub.
     def train(self, data):
         self.backSub = cv2.createBackgroundSubtractorKNN()
+        # Usually the model would be trained and provided weights based on "correctness", but I'm bad
+        # at time management
         self.mes = MES([1,1], [1,1])
         
         for img in data:
             self.backSub.apply(img)
 
-    # TODO: This needs to be done for the rest of the program to function
     def match(self, blobmask, prevBlobs):
         '''Determines if the current blob overlaps with another blob from the previous frame
         
             -> label: int
         '''
         # Apply mask to prevBlobs
-        prevSelection = cv2.bitwise_and(prevBlobs, prevBlobs, mask=blobmask)
+        prevSelection = self.apply_mask(prevBlobs, blobmask)
         # Find unique
         unique = np.unique(prevSelection, return_counts=True)
         # Get highest quantity
@@ -110,3 +130,15 @@ class Fire_Id:
             return None
 
         return blob
+    
+    def get_mask(self, labels, selector):
+        mask = labels.copy()
+        mask[mask != selector] = 0
+        mask[mask > 0] = 1
+        return mask.astype(np.uint8)
+    
+    def apply_mask(self, img, mask):
+        return cv2.bitwise_and(img, img, mask=mask)
+    
+    def print(self, message):
+        print(f"Fire_Id.py: {message}")

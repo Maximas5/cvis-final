@@ -6,15 +6,15 @@ class Color_Expert(Expert):
         self.thresh = 40
 
     # Blobs are arrays of length 3 tuples representing pixels converted to YUV
-    def predict(self, blob, YMean, UMean, VMean):
+    def predict(self, blob, YMean, UMean, VMean, verbose=False):
         '''Assumes blobs are arrays of length 3 tuples representing pixels converted to YUV'''
         fire = True
 
         # For each pixel
-        for pixel in blob:
-            y = pixel[0]
-            u = pixel[1]
-            v = pixel[2]
+        for pixel_index in range(len(blob[0])):
+            y = blob[0][pixel_index]
+            u = blob[1][pixel_index]
+            v = blob[2][pixel_index]
 
             if y == 0 or u == 0 or v == 0:
                 continue
@@ -54,3 +54,6 @@ class Color_Expert(Expert):
         # Difference between V and U values is considerable
         # Threshold defaults to 40 as prescribed by the paper
         return abs(V - U) >= self.thresh
+    
+    def print(self, message):
+        print(f"Color_Expert.py: {message}")

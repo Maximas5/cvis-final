@@ -1,14 +1,16 @@
 import cv2
 import numpy as np
 from Fire_Id import Fire_Id
-from sklearn.model_selection import train_test_split
+import pandas as pd
+from IPython.display import display
 
-def extract_frames(video_path):
+def extract_frames(video_path, limit=9999):
     # Open the video file
     video_capture = cv2.VideoCapture(video_path)
 
     frames = []
-    while video_capture.isOpened():
+    count = 0
+    while video_capture.isOpened() and count < limit:
         # Read a frame from the video file
         ret, frame = video_capture.read()
 
@@ -19,32 +21,41 @@ def extract_frames(video_path):
         # Convert the frame to a NumPy array and append to the frames list
         frames.append(np.array(frame))
 
+        count += 1
+
     # Release the video capture object
     video_capture.release()
 
     return frames
 
-def main():
+def main(verbose=True):
     # Import Data
-    video = extract_frames('test_fire/indoor1.mp4')
-    labels = None
-
-    data = np.vstack(video, labels)
-
-    # Separate into train and test data (different cameras should not be used in the same train and/or test)
-    train, test = train_test_split(data, test_size=.2, random_state=12345)
+    print("Extracting Frames")
+    video = extract_frames('test_fire/indoor640x360-30fps.mp4', 5400)
 
     # Make Fire_Id object
     classifier = Fire_Id()
 
+    # Test
+    testStart = 30
+
     # Train
+    print(f'Training')
+    train = video[:testStart]
     classifier.train(train)
 
-    # Test
-    results = classifier.test(test)
+    # Get Results
+    results = pd.DataFrame(columns=["Frame", "Cce", "Cse", "Cmes"])
+    # For each frame in test...
+    for t in range(testStart, len(video)):
+        print(f'Frame {t}')
+        # Predict
+        Cce, Cse, Cmes = classifier.predict(video[t], video[t-1], verbose=verbose)
+        # Log prediction and frame
+        results.loc[len(results.index)] = [t, Cce, Cse, Cmes]
 
-    # Print results
-    
+    # Display results
+    results.to_csv('data/fire_class.csv')
 
 if __name__ == "__main__":
-    main()
+    main(False)

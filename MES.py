@@ -10,3 +10,6 @@ class MES:
         '''Takes the class predictions of each experts and combines them into one final class prediction'''
         # If both are false will return false, otherwise it will return true
         return np.max([Cce, Cse])
+    
+    def print(self, message):
+        print(f"MES.py: {message}")
