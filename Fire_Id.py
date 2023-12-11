@@ -63,8 +63,12 @@ class Fire_Id:
 
             # Predict shape
             blob = cv2.bitwise_and(img, img, mask=blobMask)
-            blobMatch = None
             blobMatch = self.match(blobMask, prevBlobs)
+            if blobMatch != None:
+                prevMask = prevBlobs[prevBlobs == blobMatch]
+                prevMask[blobMask > 0] = 1
+                blobMatch = cv2.bitwise_and(prevImg, prevImg, mask=prevMask)
+
             Cse = self.se.predict(blob, blobMatch)
 
             # Predict MES
@@ -84,11 +88,25 @@ class Fire_Id:
     # TODO: Likely won't be done by due date. Have to at least train the backsub.
     def train(self, data):
         self.backSub = cv2.createBackgroundSubtractorKNN()
-        self.mes = MES([0,0], [0,0])
+        self.mes = MES([1,1], [1,1])
         
         for img in data:
             self.backSub.apply(img)
 
     # TODO: This needs to be done for the rest of the program to function
-    def match(self, blob, prevBlobs):
-        pass
+    def match(self, blobmask, prevBlobs):
+        '''Determines if the current blob overlaps with another blob from the previous frame
+        
+            -> label: int
+        '''
+        # Apply mask to prevBlobs
+        prevSelection = cv2.bitwise_and(prevBlobs, prevBlobs, mask=blobmask)
+        # Find unique
+        unique = np.unique(prevSelection, return_counts=True)
+        # Get highest quantity
+        argmax = np.argmax(unique[1])
+        blob = unique[0][argmax]
+        if blob == 0:
+            return None
+
+        return blob
