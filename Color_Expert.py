@@ -7,7 +7,7 @@ class Color_Expert(Expert):
 
     # Blobs are arrays of length 3 tuples representing pixels converted to YUV
     def predict(self, blob, YMean, UMean, VMean):
-        # blob = cv2.cvtColor(blob, cv2.COLOR_BGR2YUV)
+        '''Assumes blobs are arrays of length 3 tuples representing pixels converted to YUV'''
         fire = True
 
         # For each pixel
@@ -15,6 +15,10 @@ class Color_Expert(Expert):
             y = pixel[0]
             u = pixel[1]
             v = pixel[2]
+
+            if y == 0 or u == 0 or v == 0:
+                continue
+
             # if all rules satisfied, continue
             if (self.r1(y, u) and self.r2(v, u) and self.r3(y, YMean) 
             and self.r4(u, UMean) and self.r5(v, VMean) and self.r6(v, u)):

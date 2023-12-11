@@ -11,6 +11,6 @@ class Expert(ABC):
     #     pass
 
     @abstractmethod
-    def predict(self, img, prev_img, blob, prev_blob):
-        # Return blob and class
+    def predict(self):
+        # Returns classification of blob
         pass
