@@ -28,9 +28,11 @@ def extract_frames(video_path, limit=9999):
     return frames
 
 def main(verbose=True):
+    FRAMES = 3000
+
     # Import Data
     print("Extracting Frames")
-    video = extract_frames('test_fire/indoor640x360-30fps.mp4', 5400)
+    video = extract_frames('test_fire/indoor640x360-30fps.mp4', FRAMES)
 
     # Make Fire_Id object
     classifier = Fire_Id()
