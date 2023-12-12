@@ -54,37 +54,37 @@ Execution per frame takes from 5 to 15 seconds. On average, the program will tak
 
 #### Code Summary
 
-main.py
+##### main.py
 
-	My implementation of the algorithm proposed in the paper using the components specified below.
+My implementation of the algorithm proposed in the paper using the components specified below.
 
-Fire_Id.py
+##### Fire_Id.py
 
-	Class responsible for facilitating the entire process (pre-processing, data handling, etc)
+Class responsible for facilitating the entire process (pre-processing, data handling, etc)
 
-Expert.py
+##### Expert.py
 
-	Base class for experts
+Base class for experts
 
-Color_Expert.py
+##### Color_Expert.py
 
-	The class responsible for classifying a blob using color
+The class responsible for classifying a blob using color
 
-Shape_Expert.py
+##### Shape_Expert.py
 
-	The class responsible for classifying a blob using the differences in shape between the current and previous frame
+The class responsible for classifying a blob using the differences in shape between the current and previous frame
 
-Movement_Expert.py
+##### Movement_Expert.py
 
-	The class responsible for classifying a blob using the motion of the object from the previous frame
+The class responsible for classifying a blob using the motion of the object from the previous frame
 
-MES.py
+##### MES.py
 
-	The class responsible for synthesizing the classifications of the other experts into a final classification
+The class responsible for synthesizing the classifications of the other experts into a final classification
 
-test.ipynb
+##### test.ipynb
 
-	Just some experiments used to inform my technical decisions in the rest of the program
+Just some experiments used to inform my technical decisions in the rest of the program
 
 #### Packages
 
@@ -107,7 +107,9 @@ There were no improvements made to the proposed algorithm 😓
 Due to time restrictions (and my temporal inadequacy) I had to simplify MES.py and remove Movement_Expert.com. I was also unable to implement the confusion matrix weight training for all experts.
 
 #### Experimental results (paper)
+
 The researchers who wrote the paper my project is based on were able to get their model to classify instances of fire with a 93.55% accuracy rating with a 0% false negative rate.
 
 #### Experimental results (personal)
+
 I was unable to fully evaluate my model as I was unable to access labeled data and did not have the requisite time to label 3 minutes of the 30fps video I was able to obtain, however, simply looking over the results did not seem promising. There are likely many issues with my implementation that cause a very high false negative rate, which is very unlike the actual results of the paper.
