@@ -4,7 +4,7 @@ Repo found [here](https://github.com/Maximas5/cvis-final)
 
 Paper found [here](https://ieeexplore.ieee.org/document/7014233)
 
-#### Steps to run
+### Steps to run
 
 Clone my git repository found here: https://github.com/Maximas5/cvis-final 
 
@@ -28,11 +28,11 @@ Execute main.py
 
 After the program concludes, the results will be saved in data/fire_class.csv
 
-#### Execution time
+### Execution time
 
 Execution per frame takes from 5 to 15 seconds. On average, the program will take 166 minutes per 1000 frames
 
-#### Code Summary
+### Code Summary
 
 ##### main.py
 
@@ -66,7 +66,7 @@ The class responsible for synthesizing the classifications of the other experts 
 
 Just some experiments used to inform my technical decisions in the rest of the program
 
-#### Packages
+### Packages
 
 The following packages can be installed as stated above.
 
@@ -78,18 +78,18 @@ The following packages can be installed as stated above.
 	
     python-abc: Abstract class implementation for python
 
-#### Improvement
+### Improvement
 
 There were no improvements made to the proposed algorithm 😓
 
-#### Changes
+### Changes
 
 Due to time restrictions (and my temporal inadequacy) I had to simplify MES.py and remove Movement_Expert.com. I was also unable to implement the confusion matrix weight training for all experts.
 
-#### Experimental results (paper)
+### Experimental results (paper)
 
 The researchers who wrote the paper my project is based on were able to get their model to classify instances of fire with a 93.55% accuracy rating with a 0% false negative rate.
 
-#### Experimental results (personal)
+### Experimental results (personal)
 
 I was unable to fully evaluate my model as I was unable to access labeled data and did not have the requisite time to label 3 minutes of the 30fps video I was able to obtain, however, simply looking over the results did not seem promising. There are likely many issues with my implementation that cause a very high false negative rate, which is very unlike the actual results of the paper.
