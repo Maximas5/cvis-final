@@ -2,7 +2,6 @@ import cv2
 import numpy as np
 from Fire_Id import Fire_Id
 import pandas as pd
-from IPython.display import display
 
 def extract_frames(video_path, limit=9999):
     # Open the video file
